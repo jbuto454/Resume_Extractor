@@ -56,12 +56,10 @@ def detect_and_return_courses(line_list):
             courses_start_index = i
             break
 
-    courselist = []
     #splits the line with the course list starting at the index where the random punctuation ends and the courses start.
     #Adds each course to course list.
-    courselist.extend(line_with_courses[courses_start_index:].split(','))
     #strips any starting or ending whitespace from the course list.
-    courselist = [each.strip() for each in courselist]
+    courselist = [each.strip() for each in line_with_courses[courses_start_index:].split(',')]
 
     return(courselist)
 
@@ -91,6 +89,13 @@ def surround_block(tag, text):
     Returns the proper html formatting for the given tag and text as a string."""
     return(f'<{tag}>{text}</{tag}>')
 
+
+def write_html_div_to_file(html_file_to_write,interior_block_1_type, interior_block_2_type, interior_block_1_text, interior_block_2_text):
+    '''Uses the surround_block function to write an html dv block of two levels to an html file.
+    Takes the html file yu want to write to, the type of the first interior html block, the type of the second interior html block, 
+    the text to be enclosed in the first interior html block, and the text to be enclosed in the second interior html block.'''
+    html_file_to_write.write(surround_block('div', '\n' + surround_block(interior_block_1_type, interior_block_1_text) + '\n' + surround_block(interior_block_2_type,interior_block_2_text) + '\n')+ '\n')
+    
 
 def create_email_link(email_address):
     """Creates an email link with the given email_address.
@@ -164,11 +169,13 @@ def generate_html(txt_input_file, html_output_file):
     #writes the first div line to the new html file.
     new_html_file.write('<div id="page-wrap">\n')
     #writes the email line to the new html file.
-    new_html_file.write(surround_block('div', '\n' + surround_block('h1', name) + '\n' + surround_block('p','Email: ' + email_link) + '\n')+ '\n')
+    write_html_div_to_file(new_html_file,'h1', 'p', name, 'Email: ' + email_link)
+    #stores the projects list item html block as a string
+    projects_list_html = '\n' + surround_block('li',projects[1]) +  '\n' + surround_block('li',projects[2]) + '\n'
     #writes the projects line to the new html file.
-    new_html_file.write(surround_block('div', '\n' + surround_block('h2', projects[0]) + '\n' + surround_block('ul','\n' + surround_block('li',projects[1]) +  '\n' + surround_block('li',projects[2]) + '\n') + '\n') + '\n')
+    write_html_div_to_file(new_html_file,'h2', 'ul', projects[0], projects_list_html)
     #writes the courses line to the new html file.
-    new_html_file.write(surround_block('div', '\n' + surround_block('h3', 'Courses') + '\n' + surround_block('span',courses[0]+', '+courses[1]+', '+courses[2])+ '\n'))
+    write_html_div_to_file(new_html_file,'h3', 'span', 'Courses', courses[0]+', '+courses[1]+', '+courses[2])
     #writes the closing lines to the new html file.
     new_html_file.write('\n</div>\n' + '</body>\n' + '</html>\n')
     #wcloses the new html file.
