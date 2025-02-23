@@ -183,13 +183,9 @@ def generate_html(txt_input_file, html_output_file):
 
 def main():
 
-    # DO NOT REMOVE OR UPDATE THIS CODE
     # generate resume.html file from provided sample resume.txt
     generate_html('resume.txt', 'resume.html')
-
-    # DO NOT REMOVE OR UPDATE THIS CODE.
-    # Uncomment each call to the generate_html function when you’re ready
-    # to test how your program handles each additional test resume.txt file
+.
     generate_html('Test_Resume/resume_bad_name_lowercase/resume.txt', 'Test_Resume/resume_bad_name_lowercase/resume.html')
     generate_html('Test_Resume/resume_courses_w_whitespace/resume.txt', 'Test_Resume/resume_courses_w_whitespace/resume.html')
     generate_html('Test_Resume/resume_courses_weird_punc/resume.txt', 'Test_Resume/resume_courses_weird_punc/resume.html')
